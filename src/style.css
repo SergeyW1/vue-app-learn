@@ -1,6 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 :root {
+  --font: "Roboto", sans-serif, serif;
+  --color-bg: #008BFE;
+  --color-text: #FFFFFF;
+}
+ 
+body {
+  font-family: var(--font), sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
 }

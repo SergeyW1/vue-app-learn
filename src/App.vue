@@ -1,11 +1,11 @@
 <script setup>
-  import { ref } from 'vue';
-
-  const today = ref(new Date().toLocaleDateString());
+  import Button from './components/Button.vue';
 </script>
 
 <template>
-  <p>Сегодняшняя дата: {{ today }}</p>
+  <main>
+    <Button>Начать игру</Button>
+  </main>
 </template>
 
 <style scoped></style>
