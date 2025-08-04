@@ -2,26 +2,20 @@
 
 <template>
   <button class="button">
-    <div>
-      <slot name="blue" />
-    </div>
     <slot />
   </button>
 </template>
 
 <style scoped>
   .button {
-    border: none;
-    border-radius: 10px;
-    background: var(--gradient);
-    padding: 14px;
+    width: 335px;
+    height: 68px;
+    border-radius: 100px;
     font-family: var(--font), serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-primary);
+    font-size: 24px;
+    color: var(--color-text);
+    border: 0;
+    background-color: var(--color-bg);
     cursor: pointer;
-  }
-  .button:hover {
-    background: var(--gradient-inverted);
   }
 </style>
