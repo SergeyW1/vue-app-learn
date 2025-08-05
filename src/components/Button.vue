@@ -2,10 +2,7 @@
 
 <template>
   <button class="button">
-    <div>
-      <slot name="blue" />
-    </div>
-    <slot />
+    <slot></slot>
   </button>
 </template>
 
