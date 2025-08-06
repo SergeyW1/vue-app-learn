@@ -1,11 +1,17 @@
 <script setup>
-  import Button from './components/Button.vue';
+  import FancyCard from './components/FancyCard.vue';
 </script>
 
 <template>
-  <main>
-    <Button>Начать игру</Button>
-  </main>
-</template>
+  <FancyCard title="Task Info" border-color="green">
+    <p>This task is high priority and must be done today.</p>
 
-<style scoped></style>
+    <template #footer>
+      <button>Mark as done</button>
+    </template>
+  </FancyCard>
+
+  <FancyCard title="Note" border-color="orange">
+    <p>Remember to call the client tomorrow morning.</p>
+  </FancyCard>
+</template>
