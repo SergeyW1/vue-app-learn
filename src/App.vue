@@ -1,22 +1,22 @@
 <script setup>
-  import Button from './components/Button.vue';
   import Stat from './components/Stat.vue';
-  import IconLocation from './icons/IconLocation.vue';
+  import CitySelect from './components/CitySelect.vue';
 
   const data = {
     label: 'Влажность',
     stat: '90%',
   };
+
+  function getCity(city) {
+    console.log(city);
+  }
 </script>
 
 <template>
   <main class="main">
     <Stat v-bind="data" />
     <Stat label="Осадки" stat="0%" />
-    <Button>
-      <IconLocation />
-      Сохранить
-    </Button>
+    <CitySelect @select-city="getCity" />
   </main>
 </template>
 
