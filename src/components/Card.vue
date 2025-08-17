@@ -1,20 +1,45 @@
-<script setup lang="ts">
+<script setup>
+  import CloseSvg from './icons/CloseSvg.vue';
+  import OpenSvg from './icons/OpenSvg.vue';
+
   defineProps({
     id: Number,
-    word: String,
+    wordEn: String,
+    wordRus: String,
     flipped: Boolean,
-    status: String,
   });
+
+  const emit = defineEmits(['turn', 'close', 'open']);
+
+  const handleTurn = (id) => {
+    emit('turn', id);
+  };
+
+  const handleClose = (id) => {
+    emit('close', id);
+  };
+
+  const handleOpen = (id) => {
+    emit('open', id);
+  };
 </script>
 
 <template>
   <div class="card">
     <div class="card__number">0{{ id }}</div>
 
-    <div class="card__word">{{ word }}</div>
+    <div class="card__word">{{ flipped ? wordRus : wordEn }}</div>
 
-    <div class="card__actions">
-      <button class="card__btn">Перевернуть</button>
+    <div class="action-btn">
+      <button v-if="!flipped" class="action-btn__turn cursor-btn" @click="handleTurn(id)">
+        Перевернуть
+      </button>
+
+      <template v-else-if="flipped">
+        <CloseSvg type="button" class="cursor-btn" @click="handleClose(id)" />
+
+        <OpenSvg class="cursor-btn" @click="handleOpen(id)" />
+      </template>
     </div>
   </div>
 </template>
@@ -36,18 +61,21 @@
     font-size: 18px;
   }
 
-  .card__actions {
-    text-align: center;
-    font-size: 15px;
-    font-weight: bold;
+  .action-btn {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
   }
 
-  .card__btn {
+  .action-btn__turn {
     text-transform: uppercase;
     font-weight: bold;
     font-size: 15px;
-    cursor: pointer;
     border: none;
     background: white;
+  }
+
+  .cursor-btn {
+    cursor: pointer;
   }
 </style>

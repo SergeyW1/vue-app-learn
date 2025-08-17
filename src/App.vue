@@ -8,10 +8,30 @@
   const currScore = ref(0);
 
   const cards = ref([
-    { id: 6, word: 'dust-coat', flipped: false, status: 'new' },
-    { id: 7, word: 'караван верблюдов', flipped: false, status: 'new' },
-    { id: 8, word: 'автомобиль', flipped: true, status: 'done' },
+    { id: 6, wordEn: 'dust-coat', wordRus: 'караван верблюдов', flipped: false, status: 'new' },
+    { id: 7, wordEn: 'carom', wordRus: 'караван верблюдов', flipped: false, status: 'new' },
+    { id: 8, wordEn: 'car', wordRus: 'автомобиль', flipped: false, status: 'done' },
   ]);
+
+  const handleTurn = (id) => {
+    cards.value = cards.value.map((card) => {
+      if (card.id === id) {
+        return { ...card, flipped: true };
+      }
+
+      return card;
+    });
+  };
+
+  const handleClose = (id) => {
+    cards.value = cards.value.map((card) => {
+      if (card.id === id) {
+        return { ...card, flipped: false };
+      }
+
+      return card;
+    });
+  };
 </script>
 
 <template>
@@ -22,7 +42,13 @@
     </Layout>
 
     <div class="cards">
-      <Card v-for="card in cards" :key="card.id" v-bind="card" />
+      <Card
+        v-for="card in cards"
+        :key="card.id"
+        v-bind="card"
+        @turn="handleTurn"
+        @close="handleClose"
+      />
     </div>
   </main>
 </template>
