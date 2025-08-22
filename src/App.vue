@@ -10,7 +10,7 @@
   const cards = ref([
     { id: 6, wordEn: 'dust-coat', wordRus: 'караван верблюдов', flipped: false, status: 'new' },
     { id: 7, wordEn: 'carom', wordRus: 'караван верблюдов', flipped: false, status: 'new' },
-    { id: 8, wordEn: 'car', wordRus: 'автомобиль', flipped: false, status: 'done' },
+    { id: 8, wordEn: 'car', wordRus: 'автомобиль!', flipped: false, status: 'done' },
   ]);
 
   const handleTurn = (id) => {
