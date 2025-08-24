@@ -1,22 +1,19 @@
-<script setup lang="ts">
+<script setup>
   defineProps({
     todos: Array,
   });
-
   const emit = defineEmits(['delete']);
 
   const handleDeleteTodo = (id) => {
     emit('delete', id);
-    console.log(id);
   };
 </script>
 
 <template>
-  <slot></slot>
-
   <ul>
+    <slot></slot>
     <li v-for="todo in todos" :key="todo.id">
-      <span>{{ todo.title }}</span>
+      {{ todo.title }}
 
       <button @click="handleDeleteTodo(todo.id)">Удалить</button>
     </li>

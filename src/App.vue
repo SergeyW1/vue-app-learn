@@ -1,17 +1,25 @@
 <script setup>
   import { ref } from 'vue';
   import TodoList from './components/TodoList.vue';
+  import AddTodoInput from './components/AddTodoInput.vue';
 
   /**
-   * Задача:
+   * ЗАДАНИЕ:
    *
-   * Создай новый компонент TodoList.vue.
+   * 1) Создай компонент `TodoList.vue`.
+   *    - Принимает список `todos` через пропсы.
+   *    - Отображает их с помощью `v-for`.
+   *    - Добавь кнопку "Удалить" → эмить событие `remove` с id задачи.
    *
-   * Передай в него список задач (todos) через пропсы.
+   * 2) В родителе (`App.vue`):
+   *    - Реализуй метод удаления (через filter).
    *
-   * Внутри TodoList.vue отобрази этот список в виде списка с элементами, используя v-for.
+   * 3) Реализуй добавление задачи:
+   *    - Отдельный компонент `AddTodoInput.vue`.
+   *    - Используй `defineModel` + `v-model` для инпута.
+   *    - По Enter или кнопке эмить событие `submit`.
    *
-   * Каждый элемент списка должен показывать текст задачи.
+   * 4) (необязательно) Добавь поиск по названию задачи.
    */
   const todos = ref([
     { id: 100, title: 'Выучить Javascript' },
@@ -21,13 +29,29 @@
     { id: 104, title: 'Завести' },
   ]);
 
+  const newTodo = ref('');
+
+  const handleAddTodo = () => {
+    if (!newTodo.value) {
+      return;
+    }
+
+    todos.value = [...todos.value, { id: Date.now(), title: newTodo.value }];
+
+    newTodo.value = '';
+  };
+
   const handleDeleteTodo = (id) => {
-    todos.value = todos.value.filter((item) => item.id !== id);
+    todos.value = todos.value.filter((todo) => todo.id !== id);
   };
 </script>
 
 <template>
+  <AddTodoInput v-model="newTodo" />
+
+  <button @click="handleAddTodo">Добавить</button>
+
   <TodoList :todos="todos" @delete="handleDeleteTodo">
-    <h2>Список</h2>
+    <h3>Список дел</h3>
   </TodoList>
 </template>
