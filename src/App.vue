@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue';
   import TodoList from './components/TodoList.vue';
-  import AddTodoInput from './components/AddTodoInput.vue';
+  import TodoInput from './components/TodoInput.vue';
 
   /**
    * ЗАДАНИЕ:
@@ -15,43 +15,46 @@
    *    - Реализуй метод удаления (через filter).
    *
    * 3) Реализуй добавление задачи:
-   *    - Отдельный компонент `AddTodoInput.vue`.
+   *    - Отдельный компонент `TodoInput.vue`.
    *    - Используй `defineModel` + `v-model` для инпута.
    *    - По Enter или кнопке эмить событие `submit`.
    *
    * 4) (необязательно) Добавь поиск по названию задачи.
    */
   const todos = ref([
-    { id: 100, title: 'Выучить Javascript' },
-    { id: 101, title: 'Выучить Английский' },
-    { id: 102, title: 'Выучить Vue' },
-    { id: 103, title: 'Выучить все на свете' },
-    { id: 104, title: 'Завести' },
+    { id: 100, title: 'Выучить Javascript', completed: true },
+    { id: 101, title: 'Выучить Английский', completed: false },
+    { id: 102, title: 'Выучить Vue', completed: true },
+    { id: 103, title: 'Выучить все на свете', completed: false },
+    { id: 104, title: 'Завести', completed: true },
   ]);
 
-  const newTodo = ref('');
+  const newTodo = ref();
 
-  const handleAddTodo = () => {
+  const handleAddNewTodo = () => {
     if (!newTodo.value) {
       return;
     }
 
-    todos.value = [...todos.value, { id: Date.now(), title: newTodo.value }];
+    todos.value = [...todos.value, { id: Date.now(), title: newTodo.value, completed: false }];
 
     newTodo.value = '';
   };
 
-  const handleDeleteTodo = (id) => {
+  const handleDelete = (id) => {
     todos.value = todos.value.filter((todo) => todo.id !== id);
   };
 </script>
 
 <template>
-  <AddTodoInput v-model="newTodo" />
+  <TodoInput title="Поиск задачи" />
 
-  <button @click="handleAddTodo">Добавить</button>
+  <div>
+    <TodoInput v-model="newTodo" title="Введите новую задачу" />
 
-  <TodoList :todos="todos" @delete="handleDeleteTodo">
-    <h3>Список дел</h3>
-  </TodoList>
+    <button @click="handleAddNewTodo">Добавить</button>
+
+    <div>Список задач</div>
+    <TodoList :todos="todos" @delete="handleDelete" />
+  </div>
 </template>
