@@ -26,35 +26,66 @@
 </script>
 
 <template>
+  <!-- Корневой контейнер карточки -->
   <div class="card">
+    <!-- Шапка: слева номер, справа иконка статуса -->
     <div class="card__header">
+      <!-- Номер карточки (ведущий 0 — чисто для вида) -->
       <div>0{{ id }}</div>
 
-      <div v-if="status === 'done'">
+      <!-- ИКОНКИ СТАТУСА.
+           Здесь два независимых v-if: покажется только одна иконка,
+           если status строго 'done' или строго 'incomplete'. -->
+      <div v-if="status === 'incomplete'">
+        <!-- Иконка "завершено" -->
         <CloseSvg width="50" height="50" />
       </div>
 
-      <div v-if="status === 'incomplete'">
+      <div v-if="status === 'done'">
+        <!-- Иконка "не завершено" -->
         <OpenSvg width="50" height="50" />
       </div>
+      <!-- Примечание: при status === 'new' иконки нет — это ожидаемо. -->
     </div>
 
+    <!-- Основное слово на карточке:
+         flipped ? показываем русское слово : иначе английское -->
     <div class="card__word">{{ flipped ? wordRus : wordEn }}</div>
 
+    <!-- Блок действий под словом -->
     <div class="action-btn">
-      <p v-if="status === 'done' && flipped">Завершено</p>
+      <!-- КРУПНАЯ РАЗВИЛКА ПО СТОРОНЕ КАРТОЧКИ.
+           Если карточка перевёрнута (flipped === true) —
+           показываем либо текст статуса, либо кнопки смены статуса. -->
+      <template v-if="flipped">
+        <!-- Если статус 'done' — просто сообщаем "Завершено" -->
+        <p v-if="status === 'done'">Завершено</p>
 
-      <p v-else-if="status === 'incomplete' && flipped">Не завершено</p>
+        <!-- Иначе, если статус 'incomplete' — "Не завершено" -->
+        <p v-else-if="status === 'incomplete'">Не завершено</p>
 
-      <template v-else-if="flipped && status === 'new'">
-        <CloseSvg type="button" class="cursor-btn cursor-btn--done" @click="handleClose(id)" />
+        <!-- Иначе, если статус 'new' — показываем ДЕЙСТВИЯ:
+             две иконки-кнопки, чтобы пометить карточку как done или incomplete.
+             Клики отдают событие наверх (родителю), он меняет статус. -->
+        <template v-else-if="status === 'new'">
+          <!-- Пометить как 'done' -->
+          <CloseSvg type="button" class="cursor-btn cursor-btn--done" @click="handleClose(id)" />
 
-        <OpenSvg class="cursor-btn cursor-btn--incomplete" @click="handleOpen(id)" />
+          <!-- Пометить как 'incomplete' -->
+          <OpenSvg class="cursor-btn cursor-btn--incomplete" @click="handleOpen(id)" />
+        </template>
+        <!-- Если статус окажется неизвестным — внутри этого v-if ничего не покажем. -->
       </template>
 
+      <!-- ЕСЛИ КАРТОЧКА НЕ ПЕРЕВЁРНУТА (flipped === false):
+           показываем единственную кнопку "Перевернуть".
+           По клику эмитим событие, родитель меняет flipped. -->
       <button v-else-if="!flipped" class="action-btn__turn cursor-btn" @click="handleTurn(id)">
         Перевернуть
       </button>
+      <!-- Итого логика простая:
+           - Лицевая сторона: всегда одна кнопка "Перевернуть".
+           - Обратная сторона: либо текст статуса (done/incomplete), либо кнопки для выбора (new). -->
     </div>
   </div>
 </template>
