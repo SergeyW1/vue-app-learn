@@ -29,32 +29,26 @@
     { id: 104, title: 'Завести', completed: true },
   ]);
 
-  const newTodo = ref();
+  const handleDelete = (id) => {
+    todos.value = todos.value.filter((todo) => todo.id !== id);
+  };
 
-  const handleAddNewTodo = () => {
+  const newTodo = ref('');
+
+  const newTodoSubmit = () => {
     if (!newTodo.value) {
       return;
     }
-
     todos.value = [...todos.value, { id: Date.now(), title: newTodo.value, completed: false }];
 
     newTodo.value = '';
   };
-
-  const handleDelete = (id) => {
-    todos.value = todos.value.filter((todo) => todo.id !== id);
-  };
 </script>
 
 <template>
-  <TodoInput title="Поиск задачи" />
+  <TodoInput v-model="newTodo" />
 
-  <div>
-    <TodoInput v-model="newTodo" title="Введите новую задачу" />
+  <button @click="newTodoSubmit">Добавить</button>
 
-    <button @click="handleAddNewTodo">Добавить</button>
-
-    <div>Список задач</div>
-    <TodoList :todos="todos" @delete="handleDelete" />
-  </div>
+  <TodoList :todos="todos" @delete="handleDelete" />
 </template>

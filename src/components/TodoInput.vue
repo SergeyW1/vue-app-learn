@@ -1,16 +1,9 @@
 <script setup>
-  defineProps({
-    title: {
-      type: String,
-      required: true,
-    },
-  });
-
-  const newTodo = defineModel({ type: String });
+  const model = defineModel({ type: String });
 </script>
 
 <template>
-  <input v-model="newTodo" type="text" :placeholder="title" />
+  <input v-model="model" type="text" placeholder="Введите новую задачу" />
 </template>
 
 <style scoped></style>
