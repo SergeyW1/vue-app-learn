@@ -11,7 +11,9 @@
 </script>
 
 <template>
-  <ul>
+  <div v-if="!todos.length">Задача не найдена</div>
+
+  <ul v-else>
     <li v-for="todo in todos" :key="todo.id">
       <input v-model="todo.completed" type="checkbox" />
 
