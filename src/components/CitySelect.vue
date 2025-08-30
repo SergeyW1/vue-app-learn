@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import IconLocation from '../icons/IconLocation.vue';
   import Button from './Button.vue';
-  import { ref } from 'vue';
+  import { watch, ref } from 'vue';
   import Input from './Input.vue';
 
   const emit = defineEmits({
@@ -12,6 +12,10 @@
 
   let city = ref('Moscow ');
   let isEdited = ref(false);
+
+  watch(city, () => {
+    console.log(city.value);
+  });
 
   function select() {
     isEdited.value = false;
