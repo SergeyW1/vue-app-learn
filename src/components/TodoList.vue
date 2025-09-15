@@ -1,31 +1,26 @@
 <script setup>
+  import TodoItem from './TodoItem.vue';
+
+  // Родитель передаёт сюда массив задач
   defineProps({
-    todos: Array,
+    items: Array,
   });
 
+  // Эмитим событие "delete" наружу (в TodoApp)
   const emit = defineEmits(['delete']);
 
-  const handleDelete = (id) => {
+  // Обработчик удаления задачи, пробрасывает id в родителя
+  const onDelete = (id) => {
     emit('delete', id);
   };
 </script>
 
 <template>
-  <div v-if="!todos.length">Задача не найдена</div>
-
-  <ul v-else>
-    <li v-for="todo in todos" :key="todo.id">
-      <input v-model="todo.completed" type="checkbox" />
-
-      <span :class="{ isComplete: todo.completed }">{{ todo.title }}</span>
-
-      <button @click="handleDelete(todo.id)">Удалить</button>
-    </li>
+  <!-- Если задачи есть — рендерим список -->
+  <ul v-if="items.length">
+    <!-- Для каждой задачи рендерим компонент TodoItem -->
+    <!-- Передаём сам объект задачи через :item -->
+    <!-- Слушаем событие @delete и пробрасываем его наверх -->
+    <TodoItem v-for="item in items" :key="item.id" :item="item" @delete="onDelete" />
   </ul>
 </template>
-
-<style scoped>
-  .isComplete {
-    text-decoration: line-through;
-  }
-</style>

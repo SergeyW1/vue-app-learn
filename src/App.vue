@@ -1,64 +1,64 @@
 <script setup>
-  import { onMounted, ref } from 'vue';
-  import { api } from './components/api.js';
+  import { computed, ref } from 'vue';
+  import InputText from './components/InputText.vue';
+  import Btn from './components/Btn.vue';
+  import TodoList from './components/TodoList.vue';
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // const api = axios.create({ baseURL: 'https://jsonplaceholder.typicode.com' });
 
-  /**
-   * ЗАДАНИЕ:
-   *
-   * Реализовать запрос через жизненный цикл по URL
-   *
-   * 1) Создай компонент `TodoList.vue`.
-   *    - Принимает список `todos` через пропсы.
-   *    - Отображает их с помощью `v-for`.
-   *    - Добавь кнопку "Удалить" → эмить событие `remove` с id задачи.
-   *
-   * 2) В родителе (`App.vue`):
-   *    - Реализуй метод удаления (через filter).
-   *
-   * 3) Реализуй добавление задачи:
-   *    - Отдельный компонент `TodoInput.vue`.
-   *    - Используй `defineModel` + `v-model` для инпута.
-   *    - По Enter или кнопке эмить событие `submit`.
-   *
-   */
-  const todos = ref(null);
-  const isLoading = ref(false);
+  const todos = ref([
+    { id: 1, title: 'Первая задача', completed: false },
+    { id: 2, title: 'Вторая задача', completed: true },
+    { id: 3, title: 'Третья задача', completed: false },
+    { id: 4, title: 'Четвертая задача', completed: true },
+  ]);
 
-  const URL_GET = '/todos?_limit=13';
+  const newTodo = ref('');
+  const filterTodo = ref('');
 
-  const handleGetTodo = async () => {
-    try {
-      isLoading.value = true;
-
-      await delay(2000);
-
-      const response = await api.get(URL_GET);
-
-      todos.value = response.data;
-    } catch (error) {
-      console.log('error', error);
-    } finally {
-      isLoading.value = false;
+  const addNewTodo = () => {
+    if (!newTodo.value) {
+      return;
     }
+    todos.value = [...todos.value, { id: Date.now(), title: newTodo.value }];
+    newTodo.value = '';
   };
 
-  onMounted(async () => {
-    await handleGetTodo();
+  const handleDelete = (id) => {
+    todos.value = todos.value.filter((todo) => todo.id !== id);
+  };
 
-    console.log('hello');
+  // Вычисляемый список задач с учётом поиска
+  const filteredTodos = computed(() => {
+    const search = String(filterTodo.value).trim().toLowerCase();
+
+    // Если поиска нет — показываем все
+    if (!search) {
+      return todos.value;
+    }
+
+    // Иначе фильтруем по вхождению текста
+    return todos.value.filter((todo) => todo.title.toLowerCase().includes(search));
   });
 </script>
 
 <template>
-  <button @click="handleGetTodo">{{ isLoading ? 'Идет Загрузка' : 'Обновить' }}</button>
+  <h2>Список задач</h2>
 
-  <div v-if="isLoading">Идет загрузка</div>
+  <!-- Поле для поиска -->
+  <InputText v-model="filterTodo" title="Найти задачу" />
 
-  <ul v-else style="width: 300px; height: 300px">
-    <li v-for="todo in todos" :key="todo.id">
-      <span>{{ todo.title }}</span>
-    </li>
-  </ul>
+  <!-- Поле и кнопка для добавления новой задачи -->
+  <div>
+    <InputText v-model="newTodo" title="Введите новую задачу" />
+    <Btn title="Добавить" @click="addNewTodo" />
+  </div>
+
+  <!-- Список задач -->
+  <!-- TodoList получает отфильтрованные задачи -->
+  <!-- и эмитит событие @delete для удаления -->
+  <TodoList :items="filteredTodos" @delete="handleDelete" />
+
+  <!-- Сообщение, если задач нет -->
+  <div v-if="!filteredTodos.length">Нет задач</div>
 </template>

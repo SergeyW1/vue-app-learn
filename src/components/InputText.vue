@@ -10,4 +10,4 @@
   <input v-model="model" type="text" :placeholder="title" />
 </template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>
