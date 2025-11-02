@@ -2,8 +2,7 @@
   defineProps({
     title: String,
   });
-
-  const model = defineModel({ type: String });
+  const model = defineModel({ type: String, required: true });
 </script>
 
 <template>

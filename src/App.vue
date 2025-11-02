@@ -1,64 +1,50 @@
 <script setup>
-  import { computed, ref } from 'vue';
-  import InputText from './components/InputText.vue';
-  import Btn from './components/Btn.vue';
-  import TodoList from './components/TodoList.vue';
+  import { computed, ref, watch } from 'vue';
 
-  // const api = axios.create({ baseURL: 'https://jsonplaceholder.typicode.com' });
-
-  const todos = ref([
-    { id: 1, title: 'Первая задача', completed: false },
-    { id: 2, title: 'Вторая задача', completed: true },
-    { id: 3, title: 'Третья задача', completed: false },
-    { id: 4, title: 'Четвертая задача', completed: true },
+  const tasks = ref([
+    { id: 1, title: 'Feed the cat', done: false },
+    { id: 2, title: 'Read Vue docs', done: true },
+    { id: 3, title: 'Clean the desk', done: false },
   ]);
 
-  const newTodo = ref('');
-  const filterTodo = ref('');
+  const searchQuery = ref('');
 
-  const addNewTodo = () => {
-    if (!newTodo.value) {
-      return;
-    }
-    todos.value = [...todos.value, { id: Date.now(), title: newTodo.value }];
-    newTodo.value = '';
-  };
+  watch(searchQuery, (newVal) => {
+    console.log('newVal', newVal);
+  });
 
-  const handleDelete = (id) => {
-    todos.value = todos.value.filter((todo) => todo.id !== id);
-  };
+  const filteredTasks = computed(() => {
+    const search = searchQuery.value.trim().toLowerCase();
 
-  // Вычисляемый список задач с учётом поиска
-  const filteredTodos = computed(() => {
-    const search = String(filterTodo.value).trim().toLowerCase();
-
-    // Если поиска нет — показываем все
     if (!search) {
-      return todos.value;
+      return tasks.value;
     }
 
-    // Иначе фильтруем по вхождению текста
-    return todos.value.filter((todo) => todo.title.toLowerCase().includes(search));
+    return tasks.value.filter((task) => task.title.toLowerCase().includes(search));
   });
 </script>
 
 <template>
-  <h2>Список задач</h2>
+  <input v-model="searchQuery" placeholder="поиск задачи" />
 
-  <!-- Поле для поиска -->
-  <InputText v-model="filterTodo" title="Найти задачу" />
-
-  <!-- Поле и кнопка для добавления новой задачи -->
-  <div>
-    <InputText v-model="newTodo" title="Введите новую задачу" />
-    <Btn title="Добавить" @click="addNewTodo" />
-  </div>
-
-  <!-- Список задач -->
-  <!-- TodoList получает отфильтрованные задачи -->
-  <!-- и эмитит событие @delete для удаления -->
-  <TodoList :items="filteredTodos" @delete="handleDelete" />
-
-  <!-- Сообщение, если задач нет -->
-  <div v-if="!filteredTodos.length">Нет задач</div>
+  <ul>
+    <li v-for="task in filteredTasks" :key="task.id">
+      <span>{{ task.title }}</span>
+    </li>
+  </ul>
 </template>
+
+<style lang="scss">
+  //.button-switch {
+  //  background-color: darkseagreen;
+  //  color: white;
+  //  padding: 5px 10px;
+  //  cursor: pointer;
+  //  border: none;
+  //  border-radius: 5px;
+  //}
+  //
+  //.is-visible {
+  //  background-color: deepskyblue;
+  //}
+</style>

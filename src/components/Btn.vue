@@ -1,13 +1,11 @@
-<script setup>
+<script setup lang="ts">
   defineProps({
     title: String,
   });
 </script>
 
 <template>
-  <button>
-    <span>{{ title }}</span>
-  </button>
+  <button>{{ title }}</button>
 </template>
 
 <style scoped lang="scss"></style>
