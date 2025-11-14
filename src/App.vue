@@ -45,6 +45,7 @@
 <template>
   <h2>Список задач</h2>
 
+  <div>Hello</div>
   <!-- Поле для поиска -->
   <InputText v-model="filterTodo" title="Найти задачу" />
 
